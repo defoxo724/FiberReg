@@ -14,7 +14,7 @@ const CustomerAddressSection = (props: CustomerAddressSectionProps) => {
   return (
     <div>
       <div className="border-bottom">
-        Adres do wysyłki kurierskiej:{" "}
+        {props.title}
         {props.addressId != null ? (
           <ShowAddressComponent addressType={props.addressType} customerId={props.customerId} />
         ) : (

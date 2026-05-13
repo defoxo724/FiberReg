@@ -4,6 +4,7 @@ import RootPage from "./react-router-pages/RootPage";
 import GetAllCustomersPage from "./react-router-pages/GetAllCustomersPage";
 import ShowCustomerPage from "./react-router-pages/ShowCustomerPage";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
 import TestPage from "./react-router-pages/TestPage";
 import CreateAddressPage from "./react-router-pages/CreateAddressPage";
 
