@@ -1,12 +1,12 @@
 import React from "react";
 import CreateNewAddressComponent from "../components/address/AddressFormComponent";
-import type { AddressCreatedDto } from "../dto/AddressCreatedDto";
+import type { AddressCreateRequest } from "../DTO/AddressDtos";
 
 const TestPage = () => {
   return (
     <div>
       <CreateNewAddressComponent
-        onSubmit={function (data: AddressCreatedDto): void {
+        onSubmit={function (data: AddressCreateRequest): void {
           console.log(data);
         }}
       />

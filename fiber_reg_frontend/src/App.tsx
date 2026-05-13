@@ -7,6 +7,7 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
 import TestPage from "./react-router-pages/TestPage";
 import CreateAddressPage from "./react-router-pages/CreateAddressPage";
+import { AddressType } from "./enum/AddressType";
 
 const queryClient = new QueryClient();
 
@@ -31,10 +32,10 @@ function App() {
             <Route path="/get-all-customers" element={<GetAllCustomersPage />} />
             <Route path="/show-customer/:id" element={<ShowCustomerPage />} />
             <Route path="/test" element={<TestPage />} />
-            <Route path="/customer/:id/create-registered-address" element={<CreateAddressPage addressType={"REGISTERED"} />} />
-            <Route path="/customer/:id/create-mailing-address" element={<CreateAddressPage addressType={"MAILING"} />} />
-            <Route path="/customer/:id/create-billing-address" element={<CreateAddressPage addressType={"BILLING"} />} />
-            <Route path="/customer/:id/create-shipping-address" element={<CreateAddressPage addressType={"SHIPPING"} />} />
+            <Route path="/customer/:id/create-registered-address" element={<CreateAddressPage addressType={AddressType.REGISTERED} />} />
+            <Route path="/customer/:id/create-mailing-address" element={<CreateAddressPage addressType={AddressType.MAILING} />} />
+            <Route path="/customer/:id/create-billing-address" element={<CreateAddressPage addressType={AddressType.BILLING} />} />
+            <Route path="/customer/:id/create-shipping-address" element={<CreateAddressPage addressType={AddressType.SHIPPING} />} />
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>

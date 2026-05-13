@@ -1,7 +1,7 @@
 import React from "react";
-import { AddressType } from "../../hooks/CustomerHooks";
 import ShowAddressComponent from "./ShowAddressComponent";
 import NoAddressComponent from "./NoAddressComponent";
+import type { AddressType } from "../../enum/AddressType";
 
 interface CustomerAddressSectionProps {
   title: string;

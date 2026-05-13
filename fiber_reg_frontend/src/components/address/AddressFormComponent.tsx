@@ -1,77 +1,33 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import React, { useState } from "react";
-import type { AddressCreatedDto } from "../../dto/AddressCreatedDto";
+import { useFetchCities, useFetchCommunes, useFetchDistricts, useFetchProvinces } from "../../hooks/AddressFormHooks";
+import type { AddressCreateRequest } from "../../DTO/AddressDtos";
+import Select from "../ui/Select";
 
 interface AddressFormComponentProps {
-  onSubmit: (data: AddressCreatedDto) => void;
+  onSubmit: (data: AddressCreateRequest) => void;
 }
 
 const AddressFormComponent = (props: AddressFormComponentProps) => {
-  const [province, setProvince] = useState<string>("");
-  const [district, setDistrict] = useState<string>("");
-  const [commune, setCommune] = useState<string>("");
-  const [city, setCity] = useState<string>("");
-  const [street, setStreet] = useState("");
-  const [houseNumber, setHouseNumber] = useState("");
-  const [apartmentNumber, setApartmentNumber] = useState("");
-  const [zipCode, setZipCode] = useState("");
-
-  /* Województwo */
-  const {
-    data: provincesData,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["provinces_form"],
-    queryFn: async () => {
-      const res = await axios.get("http://localhost:60032/geo/provinces");
-      return res.data as string[];
-    },
+  const [addressCreateRequest, setAddressCreateRequest] = useState<AddressCreateRequest>({
+    province: "",
+    district: "",
+    commune: "",
+    city: "",
+    street: "",
+    houseNumber: 0,
+    apartmentNumber: 0,
+    zipCode: "",
   });
 
-  /* Powiat */
-  const { data: districtsData } = useQuery({
-    queryKey: ["districts_form", province],
-    queryFn: async () => {
-      const res = await axios.get(`http://localhost:60032/geo/${province}/districts`);
-      return res.data as string[];
-    },
-    enabled: !!province,
-  });
-
-  /* Gmina */
-  const { data: communesData } = useQuery({
-    queryKey: ["communes_form", province, district],
-    queryFn: async () => {
-      const res = await axios.get(`http://localhost:60032/geo/${province}/${district}/communes`);
-      return res.data as string[];
-    },
-    enabled: !!province && !!district,
-  });
-
-  /* Miasto */
-  const { data: citiesData } = useQuery({
-    queryKey: ["cities_form", province, district, commune],
-    queryFn: async () => {
-      const res = await axios.get(`http://localhost:60032/geo/${province}/${district}/${commune}/cities`);
-      return res.data as string[];
-    },
-    enabled: !!province && !!district && !!commune,
-  });
+  const { data: provincesData, isLoading, isError } = useFetchProvinces();
+  const { data: districtsData } = useFetchDistricts(addressCreateRequest.province);
+  const { data: communesData } = useFetchCommunes(addressCreateRequest.province, addressCreateRequest.district);
+  const { data: citiesData } = useFetchCities(addressCreateRequest.province, addressCreateRequest.district, addressCreateRequest.commune);
 
   const handleSubmit = () => {
-    if (!province || !district || !commune || !city) return;
-    props.onSubmit({
-      province,
-      district,
-      commune,
-      city,
-      street,
-      houseNumber,
-      apartmentNumber,
-      zipCode,
-    });
+    if (!addressCreateRequest.province || !addressCreateRequest.district || !addressCreateRequest.commune || !addressCreateRequest.city) return;
+
+    props.onSubmit(addressCreateRequest);
   };
 
   if (isLoading) return <p>Loading...</p>;
@@ -80,92 +36,125 @@ const AddressFormComponent = (props: AddressFormComponentProps) => {
   return (
     <div>
       <div>
-        <label htmlFor="province">Województwo</label>
-        <select
-          id="province"
-          value={province}
-          onChange={(e) => {
-            setProvince(e.target.value);
-            setDistrict("");
-            setCommune("");
-            setCity("");
+        <Select
+          title={"Województwo"}
+          onChange={function (e: React.ChangeEvent<HTMLSelectElement>): void {
+            setAddressCreateRequest({
+              ...addressCreateRequest,
+              province: e.target.value,
+              district: "",
+              commune: "",
+              city: "",
+            });
           }}
-        >
-          <option value=""></option>
-          {provincesData?.map((p) => (
-            <option key={p} value={p}>
-              {p}
-            </option>
-          ))}
-        </select>
+          options={provincesData?.map((p) => [p, p]) || []}
+          selected={addressCreateRequest.province}
+        />
+
+        <Select
+          title={"Powiat"}
+          onChange={function (e: React.ChangeEvent<HTMLSelectElement>): void {
+            setAddressCreateRequest({
+              ...addressCreateRequest,
+              district: e.target.value,
+              commune: "",
+              city: "",
+            });
+          }}
+          options={districtsData?.map((p) => [p, p]) || []}
+          selected={addressCreateRequest.district}
+        />
+
+        <Select
+          title={"Gmina"}
+          onChange={function (e: React.ChangeEvent<HTMLSelectElement>): void {
+            setAddressCreateRequest({
+              ...addressCreateRequest,
+              commune: e.target.value,
+              city: "",
+            });
+          }}
+          options={communesData?.map((p) => [p, p]) || []}
+          selected={addressCreateRequest.commune}
+        />
+
+        <Select
+          title={"Miasto"}
+          onChange={function (e: React.ChangeEvent<HTMLSelectElement>): void {
+            setAddressCreateRequest({
+              ...addressCreateRequest,
+              city: e.target.value,
+            });
+          }}
+          options={citiesData?.map((p) => [p, p]) || []}
+          selected={addressCreateRequest.city}
+        />
       </div>
 
-      <div>
-        <label htmlFor="district">Powiat</label>
-        <select
-          id="district"
-          value={district}
-          onChange={(e) => {
-            setDistrict(e.target.value);
-            setCommune("");
-            setCity("");
-          }}
-        >
-          <option value=""></option>
-          {districtsData?.map((d) => (
-            <option key={d} value={d}>
-              {d}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label htmlFor="commune">Gmina</label>
-        <select
-          id="commune"
-          value={commune}
-          onChange={(e) => {
-            setCommune(e.target.value);
-            setCity("");
-          }}
-        >
-          <option value=""></option>
-          {communesData?.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label htmlFor="city">Miasto</label>
-        <select id="city" value={city} onChange={(e) => setCity(e.target.value)}>
-          <option value=""></option>
-          {citiesData?.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
-      </div>
       <div>
         <label htmlFor="street">Ulica</label>
-        <input type="text" name="street" id="street" value={street} onChange={(e) => setStreet(e.target.value)} />
+
+        <input
+          type="text"
+          id="street"
+          value={addressCreateRequest.street}
+          onChange={(e) => {
+            setAddressCreateRequest({
+              ...addressCreateRequest,
+              street: e.target.value,
+            });
+          }}
+        />
       </div>
+
       <div>
         <label htmlFor="houseNumber">Numer domu</label>
-        <input type="text" name="houseNumber" id="houseNumber" value={houseNumber} onChange={(e) => setHouseNumber(e.target.value)} />
+
+        <input
+          type="text"
+          id="houseNumber"
+          value={addressCreateRequest.houseNumber}
+          onChange={(e) => {
+            setAddressCreateRequest({
+              ...addressCreateRequest,
+              houseNumber: Number(e.target.value),
+            });
+          }}
+        />
       </div>
+
       <div>
         <label htmlFor="apartmentNumber">Numer mieszkania</label>
-        <input type="text" name="apartmentNumber" id="apartmentNumber" value={apartmentNumber} onChange={(e) => setApartmentNumber(e.target.value)} />
+
+        <input
+          type="text"
+          id="apartmentNumber"
+          value={addressCreateRequest.apartmentNumber}
+          onChange={(e) => {
+            setAddressCreateRequest({
+              ...addressCreateRequest,
+              apartmentNumber: Number(e.target.value),
+            });
+          }}
+        />
       </div>
+
       <div>
         <label htmlFor="zipCode">Kod pocztowy</label>
-        <input type="text" name="zipCode" id="zipCode" value={zipCode} onChange={(e) => setZipCode(e.target.value)} />
+
+        <input
+          type="text"
+          id="zipCode"
+          value={addressCreateRequest.zipCode}
+          onChange={(e) => {
+            setAddressCreateRequest({
+              ...addressCreateRequest,
+              zipCode: e.target.value,
+            });
+          }}
+        />
       </div>
+
       <div>
         <button onClick={handleSubmit}>Submit</button>
       </div>

@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import axios from "axios";
-import { useFetchAddress, type AddressType } from "../../hooks/CustomerHooks";
+import type { AddressType } from "../../enum/AddressType";
+import { useFetchAddress } from "../../hooks/CustomerHooks";
 
 interface ShowAddressComponentProps {
   customerId: number;

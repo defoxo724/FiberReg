@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 
-interface AccordionProps {
+interface ExpandProps {
   title: string;
   children: React.ReactNode;
 }
 
-const Accordion = (props: AccordionProps) => {
+const Expand = (props: ExpandProps) => {
   const [expanded, setExpanded] = React.useState<boolean>(false);
   const [iconClass, setIconClass] = React.useState<string>("");
 
@@ -32,4 +32,4 @@ const Accordion = (props: AccordionProps) => {
   );
 };
 
-export default Accordion;
+export default Expand;

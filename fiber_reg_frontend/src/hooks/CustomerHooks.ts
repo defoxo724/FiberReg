@@ -1,49 +1,10 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import type { ApiResponse } from "./ApiResponse";
+import type { CreateCustomerRequest, CustomerCreatedResponse, CustomerListElementDto, FullCustomerDataResponse } from "../DTO/CustomerDtos";
+import type { AddressCreateResponse } from "../DTO/AddressDtos";
+import type { AddressType } from "../enum/AddressType";
 
-interface CustomerListElementDto {
-  id: number;
-  name: string;
-}
-
-interface CustomerCreatedResponse {
-  id: number;
-  name: string;
-}
-
-interface CreateCustomerRequest {
-  name: string;
-}
-
-interface FullCustomerDataResponse {
-  id: number;
-  name: string;
-
-  registeredAddressId: number;
-  mailingAddressId: number;
-  billingAddressId: number;
-  shippingAddressId: number;
-}
-
-interface AddressCreateResponse {
-  id: number;
-  province: string;
-  district: string;
-  commune: string;
-  city: string;
-  street: string;
-  houseNumber: number;
-  apartmentNumber: number;
-  zipCode: string;
-}
-
-export enum AddressType {
-  REGISTERED = "REGISTERED",
-  BILLING = "BILLING",
-  MAILING = "MAILING",
-  SHIPPING = "SHIPPING",
-}
 
 export const useCreateCustomer = () => {
   return useMutation({

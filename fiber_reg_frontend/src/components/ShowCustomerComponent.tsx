@@ -1,8 +1,9 @@
 import NoAddressComponent from "./address/NoAddressComponent";
 import ShowAddressComponent from "./address/ShowAddressComponent";
-import { AddressType, useFetchCustomer } from "../hooks/CustomerHooks";
 import CustomerAddressSection from "./address/CustomerAddressSection";
-import Accordion from "./Expand";
+import Accordion from "./ui/Expand";
+import { useFetchCustomer } from "../hooks/CustomerHooks";
+import { AddressType } from "../enum/AddressType";
 
 interface ShowCustomerComponentProps {
   id: number;

@@ -1,0 +1,6 @@
+export enum AddressType {
+  REGISTERED = "REGISTERED",
+  BILLING = "BILLING",
+  MAILING = "MAILING",
+  SHIPPING = "SHIPPING",
+}

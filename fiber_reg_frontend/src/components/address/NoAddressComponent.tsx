@@ -1,19 +1,20 @@
 import React from "react";
+import { AddressType } from "../../enum/AddressType";
 
 interface NoAddressComponentProps {
   customerId: number;
-  type: "REGISTERED" | "MAILING" | "BILLING" | "SHIPPING";
+  type: AddressType;
 }
 
 const NoAddressComponent = (props: NoAddressComponentProps) => {
   let href = "";
-  if (props.type == "REGISTERED") {
+  if (props.type == AddressType.REGISTERED) {
     href = `/customer/${props.customerId}/create-registered-address`;
-  } else if (props.type == "MAILING") {
+  } else if (props.type == AddressType.MAILING) {
     href = `/customer/${props.customerId}/create-mailing-address`;
-  } else if (props.type == "BILLING") {
+  } else if (props.type == AddressType.BILLING) {
     href = `/customer/${props.customerId}/create-billing-address`;
-  } else if (props.type == "SHIPPING") {
+  } else if (props.type == AddressType.SHIPPING) {
     href = `/customer/${props.customerId}/create-shipping-address`;
   }
 
