@@ -2,30 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
-type Customer = {
-  id: number;
-  name: string;
-  voivodeship: string;
-  county: string;
-  municipality: string;
-  locality: string;
-  street: string;
-  houseNumber: string;
-  apartmentNumber: string;
-  zipCode: string;
-};
+import { useFetchAllCustomers } from "../hooks/CustomerHooks";
 
 const GetAllCustomersComponent = () => {
   const navigate = useNavigate();
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["customers"],
-    queryFn: async () => {
-      const res = await axios.get("http://localhost:8080/customers");
-      return res.data as Customer[];
-    },
-  });
+  const { data, isLoading, isError } = useFetchAllCustomers();
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error</p>;

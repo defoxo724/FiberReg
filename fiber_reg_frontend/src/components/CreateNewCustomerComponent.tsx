@@ -1,23 +1,16 @@
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import React from "react";
+import { useCreateCustomer } from "../hooks/CustomerHooks";
 
 const CreateNewCustomerComponent = () => {
   const [name, setName] = React.useState<string>("");
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value);
 
-  const mutation = useMutation({
-    mutationFn: (data: any) => axios.post("http://localhost:8080/customers", data),
-    onSuccess: () => {
-      setName("");
-    },
-  });
+  const mutation = useCreateCustomer();
 
   const handleSubmit = () => {
     mutation.mutate({
       name,
     });
-    
   };
 
   return (

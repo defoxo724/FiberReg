@@ -1,24 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import type { AddressDto } from "../../dto/AddressDto";
 import axios from "axios";
+import { useFetchAddress, type AddressType } from "../../hooks/CustomerHooks";
 
 interface ShowAddressComponentProps {
-  userId: number;
-  addressType: "REGISTERED" | "BILLING" | "MAILING" | "SHIPPING";
+  customerId: number;
+  addressType: AddressType;
 }
 
 const ShowAddressComponent = (props: ShowAddressComponentProps) => {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["address", props.addressType, props.userId],
-    queryFn: async () => {
-      let url = "";
-      url = `http://localhost:8080/customers/${props.userId}/addresses/${props.addressType}`;
-      const res = await axios.get(url);
-      console.log(res);
-      return res.data as AddressDto;
-    },
-  });
+  const { data, isLoading, isError } = useFetchAddress(props.customerId, props.addressType);
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error</p>;
