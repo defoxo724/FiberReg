@@ -1,14 +1,19 @@
 import React from "react";
 import { useSearchCustomer } from "../../hooks/CustomerHooks";
 import type { CustomerListElementDto } from "../../DTO/CustomerDtos";
+import { useNavigate } from "react-router-dom";
+import CustomerNavigation from "./CustomerNavigation";
 
-const CustomerSearchContainer = () => {
+const CustomerSearchBar = () => {
   const [searchText, setSearchText] = React.useState<string>("");
 
   const { data, isLoading, isError } = useSearchCustomer(searchText);
 
+  const navigate = useNavigate();
+
   return (
     <div>
+      {/* <CustomerNavigation /> */}
       <input type="search" placeholder="Wyszukaj klienta..." value={searchText} onChange={(e) => setSearchText(e.target.value)} />
 
       {isLoading && <p>Loading...</p>}
@@ -19,7 +24,14 @@ const CustomerSearchContainer = () => {
 
       <div>
         {data?.map((customer: CustomerListElementDto) => (
-          <div key={customer.id}>
+          <div
+            key={customer.id}
+            style={{ cursor: "pointer" }}
+            className="border"
+            onClick={() => {
+              navigate("/page/consultant/customer/" + customer.id + "/summary");
+            }}
+          >
             <div>
               <b>{customer.name}</b>
             </div>
@@ -32,4 +44,4 @@ const CustomerSearchContainer = () => {
   );
 };
 
-export default CustomerSearchContainer;
+export default CustomerSearchBar;

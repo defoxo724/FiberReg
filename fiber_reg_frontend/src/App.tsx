@@ -8,7 +8,10 @@ import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
 import TestPage from "./react-router-pages/TestPage";
 import CreateAddressPage from "./react-router-pages/CreateAddressPage";
 import { AddressType } from "./enum/AddressType";
-import MainConsultantPage from "./pages/consultant/MainConsultantPage";
+import CustomerSearchView from "./components/consultant/CustomerSearchView";
+import CustomerSummary from "./components/consultant/customer-view/CustomerSummary";
+import CustomerNewOrder from "./components/consultant/customer-view/CustomerNewOrder";
+import CustomerInstallations from "./components/consultant/customer-view/CustomerInstallations";
 
 const queryClient = new QueryClient();
 
@@ -38,7 +41,10 @@ function App() {
             <Route path="/customer/:id/create-billing-address" element={<CreateAddressPage addressType={AddressType.BILLING} />} />
             <Route path="/customer/:id/create-shipping-address" element={<CreateAddressPage addressType={AddressType.SHIPPING} />} />
             {/* There are temporary pages, they will be moved in a future to different app? */}
-            <Route path="/page/consultant" element={<MainConsultantPage />} />
+            <Route path="/page/consultant/customer/search" element={<CustomerSearchView />} />
+            <Route path="/page/consultant/customer/:id/summary" element={<CustomerSummary />} />
+            <Route path="/page/consultant/customer/:id/installations" element={<CustomerInstallations />} />
+            <Route path="/page/consultant/customer/:id/new-order" element={<CustomerNewOrder />} />
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>
