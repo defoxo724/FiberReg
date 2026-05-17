@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
+//TODO: Change "user" to "customer"
 @RestController
 @AllArgsConstructor
 @CrossOrigin("*")
@@ -41,7 +43,6 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.getCustomerData(id));
     }
 
-    //
     @PostMapping("/customers/{userId}/addresses/{type}")
     public ResponseEntity<Void> createRegisteredAddressAndAssignToCustomer(
             @RequestBody CreateAddressRequest entity,
@@ -58,6 +59,11 @@ public class CustomerController {
             @PathVariable AddressType type) {
 
         return ResponseEntity.ok(customerService.getAddress(customerId, type));
+    }
+
+    @GetMapping("/customers/search")
+    public ResponseEntity<List<CustomerListElementResponse>> searchCustomers(@RequestParam String searchString) {
+        return ResponseEntity.ok(customerService.searchForCustomer(searchString));
     }
 
 }

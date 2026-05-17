@@ -48,3 +48,14 @@ export const useFetchAddress = (customerId: number, addressType: AddressType): A
   });
   return { data, isLoading, isError };
 };
+
+export const useSearchCustomer = (searchString: string) => { 
+    const { data, isLoading, isError } = useQuery({
+    queryKey: ["customers_search", searchString],
+    queryFn: async () => {
+      const res = await axios.get(`http://localhost:8080/customers/search`, {params: {searchString: searchString}});
+      return res.data as CustomerListElementDto[];
+    },
+  });
+  return { data, isLoading, isError };
+}

@@ -5,6 +5,7 @@ import fiber_reg_core.fiber_reg_core.address.AddressRepository;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -140,6 +141,15 @@ public class CustomerService {
         }
         log.info("Retrieved data of " + type + " of customer of id " + customerId);
         return AddressModelToAddressResponseConverter.convert(addressModel);
+    }
+
+    public List<CustomerListElementResponse> searchForCustomer(String searchString) {
+        return customerRepository.searchForCustomer(searchString)
+                .stream()
+                .map(model -> new CustomerListElementResponse(
+                        model.getId(),
+                        model.getName()))
+                .toList();
     }
 
 }
